@@ -42,9 +42,9 @@ void main() {
 
   // Rotate particle position
   vec3 particlePosition = position;
-  particlePosition = particlePosition * rotation3dY(uTime * 0.5 * distanceFactor);
-  particlePosition = particlePosition * modifyParticles(0.4 , log(xzDistanceFactor) * 0.02);
-  particlePosition = particlePosition * closeness(distanceFactor * uTime * 0.4);
+  particlePosition = particlePosition * rotation3dY(uTime * 0.4 * distanceFactor);
+  particlePosition = particlePosition * modifyParticles(0.4 , log(xzDistanceFactor) * 0.08);
+  particlePosition = particlePosition * closeness(distanceFactor * uTime * 0.2);
 
   particlePosition.xyz += normalize(particlePosition.xyz - vec3(0.0)) / 1.2;
 

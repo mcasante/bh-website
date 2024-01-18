@@ -1,7 +1,7 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { useScroll } from "@react-three/drei";
+import { useScroll, Outlines } from "@react-three/drei";
 
 import vertexShader from "!!raw-loader!./vertexShader.glsl";
 import fragmentShader from "!!raw-loader!./fragmentShader.glsl";
@@ -12,6 +12,7 @@ const BlackHole = (props) => {
 
   const points = useRef();
   const scroll = useScroll()
+  const [outline, setOutline] = useState(0);
 
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -53,7 +54,7 @@ const BlackHole = (props) => {
   useFrame((state) => {
     const { clock } = state;
 
-    const offset = .5 - scroll.offset
+    const offset = 1 - scroll.offset
 
     const camPos = [
       (Math.sin(offset) * - 10),
@@ -63,26 +64,39 @@ const BlackHole = (props) => {
     state.camera.position.set(...camPos)
     state.camera.lookAt(0, 0, 0)
     points.current.material.uniforms.uTime.value = clock.elapsedTime;
+
+    const outline = Math.min(clock.getElapsedTime() / 120, 0.05);
+    setOutline(outline);
   });
 
   return (
-    <points ref={points}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={particlesPosition.length / 3}
-          array={particlesPosition}
-          itemSize={3}
+    <>
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[0.75, 64, 64]} />
+        <meshBasicMaterial color="black" />
+        <Outlines 
+          thickness={outline}
+          color="white"
         />
-      </bufferGeometry>
-      <shaderMaterial
-        blending={THREE.AdditiveBlending}
-        depthWrite={false}
-        fragmentShader={fragmentShader}
-        vertexShader={vertexShader}
-        uniforms={uniforms}
-      />
-    </points>
+      </mesh>
+      <points ref={points}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={particlesPosition.length / 3}
+            array={particlesPosition}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <shaderMaterial
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          fragmentShader={fragmentShader}
+          vertexShader={vertexShader}
+          uniforms={uniforms}
+        />
+      </points>
+    </>
   );
 };
 
