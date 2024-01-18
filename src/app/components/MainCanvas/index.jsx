@@ -63,7 +63,7 @@ const Scene = () => {
   return (
     <ScrollControls pages={1.5}>
       <Scroll>
-        <BlackHole count={100000} />
+        <BlackHole count={300000} />
       </Scroll>
       <Scroll html className="w-full">
         <Data />
