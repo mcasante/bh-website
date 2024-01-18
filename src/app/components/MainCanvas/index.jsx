@@ -1,95 +1,65 @@
 'use client'
 
-import { OrbitControls } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
-import * as THREE from "three";
+import { ScrollControls, Scroll } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { useRef } from "react";
 
-import vertexShader from "!!raw-loader!./vertexShader.glsl";
-import fragmentShader from "!!raw-loader!./fragmentShader.glsl";
-
-const CustomGeometryParticles = (props) => {
-  const { count } = props;
-  const radius = 2;
-
-  // This reference gives us direct access to our points
-  const points = useRef();
-
-  // Generate our positions attributes array
-  const particlesPosition = useMemo(() => {
-    const positions = new Float32Array(count * 3);
-    
-    for (let i = 0; i < count; i++) {
-      const distance = Math.sqrt(Math.random()) * radius;
-      const theta = THREE.MathUtils.randFloatSpread(360); 
-      const phi = THREE.MathUtils.randFloatSpread(360); 
-
-      let x = distance * Math.sin(theta) * Math.cos(phi)
-      let y = distance * Math.sin(theta) * Math.sin(phi);
-      let z = distance * Math.cos(theta);
-
-      positions.set([x, y, z], i * 3);
-    }
-    
-    return positions;
-  }, [count]);
-
-  const uniforms = useMemo(() => ({
-    uTime: {
-      value: 0.0
-    },
-    uRadius: {
-      value: radius
-    },
-    uMouse: {
-      value: [0.0, 0.0]
-    }
-  }), [])
-
-  document.addEventListener("mousemove", (e) => {
-    uniforms.uMouse.value[0] = (e.clientX - window.innerWidth / 2);
-    uniforms.uMouse.value[1] = -(e.clientY - window.innerHeight / 2);
-
-    // normalize mouse position between -1 and 1
-    uniforms.uMouse.value[0] /= window.innerWidth / 8;
-    uniforms.uMouse.value[1] /= window.innerHeight / 8;
-  });
-
-  useFrame((state) => {
-    const { clock } = state;
-
-    points.current.material.uniforms.uTime.value = clock.elapsedTime;
-  });
-
-  return (
-    <points ref={points}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={particlesPosition.length / 3}
-          array={particlesPosition}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <shaderMaterial
-        blending={THREE.AdditiveBlending}
-        depthWrite={false}
-        fragmentShader={fragmentShader}
-        vertexShader={vertexShader}
-        uniforms={uniforms}
-      />
-    </points>
-  );
-};
+import BlackHole from "./BlackHole";
 
 const Scene = () => {
+  const page2 = useRef();
   return (
-    <Canvas 
-    // camera={{ position: [2.0, 2.0, 2.0] }}
-    >
-      <ambientLight intensity={0.5} />
-      <CustomGeometryParticles count={50000} />
-      <OrbitControls />
+    <Canvas>
+      <ScrollControls pages={2}>
+        <Scroll>
+          <mesh position={[0, 0, 0]}>
+            <sphereGeometry args={[0.75, 64, 64]} />
+            <meshBasicMaterial
+              color="black"
+            />
+          </mesh>
+          <BlackHole count={300000} />
+          {/* <OrbitControls /> */}
+          </Scroll>
+        <Scroll html className="w-full">
+          <main className="relative">
+            <div className="absolute top-0 w-full h-[100svh] p-12">
+              <div className="sticky w-full	h-full border border-white" />
+            </div>
+            <div className="w-full h-[100svh] px-12 py-20 flex justify-between flex-col">
+              <h1 className="text-xl font-thin uppercase mx-4">
+                Hello!<br/> my name is <b>Math</b> and I'm a <b>frontend developer</b>
+              </h1>
+              <button onClick={() => {
+                page2.current.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }}>
+                <i className="arrow-down">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto mt-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="white">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </i>
+              </button>
+            </div>
+            <div ref={page2} className="w-full h-[100svh] px-12 py-20 flex items-end justify-end">
+              <div>
+                <p className="text-md text-justify font-thin">
+                  Hey there! 👋 I'm a <b>frontend developer</b> living on the edge with no passion and <b>nothing to lose</b>. My mojo revolves around <b>Vue.js</b> and <b>Nuxt</b>, and I can groove with <b>React</b> and <b>Next.js</b> too.<br/><br/>
+
+                  Currently, I'm <b>Freaking out</b> 'cause, well, <b>I have no job!</b> Living the thrill, you know?<br/><br/>
+
+                  I daydream about bouldering all day, but I'm not the heir to a <b>multimillionaire</b>. So I have to work for a living.<br/><br/>
+
+                  If you've got a <b>job</b> for me, I'm <b>available</b> for <b>freelance</b> or <b>full-time</b> positions. Like, for real...
+                </p>
+                <h2 className="text-sm text-right font-thin mt-2">— Math in "A cry for help" </h2>
+              </div>
+            </div>
+          </main>
+        </Scroll>
+      </ScrollControls>
     </Canvas>
   );
 };
