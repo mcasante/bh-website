@@ -42,7 +42,7 @@ const Data = () => {
             style={style}
           >
             <p className="text-md text-justify font-thin">
-              Hey there! 👋 I'm a <b>frontend developer</b> living on the edge with no passion and <b>nothing to lose</b>. My mojo revolves around <b>Vue.js</b> and <b>Nuxt</b>, and I can groove with <b>React</b> and <b>Next.js</b> too.<br/><br/>
+              Hey there! 👋 I'm a <b>frontend developer</b> living on the edge <b>nothing to lose</b>. My mojo revolves around <b>Vue.js</b> and <b>Nuxt</b>, and I can groove with <b>React</b> and <b>Next.js</b> too.<br/><br/>
 
               Currently, I'm <b>Freaking out</b> 'cause, well, <b>I have no job!</b> Living the thrill, you know?<br/><br/>
 
@@ -63,7 +63,7 @@ const Scene = () => {
   return (
     <ScrollControls pages={1.5}>
       <Scroll>
-        <BlackHole count={300000} />
+        <BlackHole count={300_000} />
       </Scroll>
       <Scroll html className="w-full">
         <Data />
@@ -75,6 +75,8 @@ const Scene = () => {
 const MainCanvas = () => {
   return (
     <Canvas gl={{ antialias: true }}>
+      <ambientLight intensity={0.5} />
+      <color attach="background" args={["#000000"]} />
       <Scene />
     </Canvas>
   );
