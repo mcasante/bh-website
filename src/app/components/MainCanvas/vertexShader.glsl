@@ -36,11 +36,11 @@ void main() {
   float distanceFactor = pow(uRadius - distance(position, vec3(0.0)), 1.5);
   float xzDistanceFactor = pow(uRadius - distance(vec3(position.x, 0.0, position.z), vec3(0.0)), 1.5);
 
-  float factor = 1.0 * sin(uTime * 1.0);
+  float factor = 10.0 * sin(uTime * 0.1);
 
+  float fRotation = distanceFactor * uTime * 0.4;
   // float fRotation = distanceFactor * uTime * 0.4;
   float fDistance = mod(distanceFactor * uTime * 0.2, 4.0);
-  float fRotation = factor * fDistance;
   float xzFDistance = mod(xzDistanceFactor * uTime * 0.2, 4.0);
   // float fModifier = mod(log(fDistance) * 0.008, 200.0);
   float fModifier = log(xzFDistance) * 0.08;
