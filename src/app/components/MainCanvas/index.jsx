@@ -42,7 +42,7 @@ const Data = () => {
             style={style}
           >
             <p className="text-md text-justify font-thin">
-              Hey there! 👋 I'm a <b>frontend developer</b> living on the edge <b>nothing to lose</b>. My mojo revolves around <b>Vue.js</b> and <b>Nuxt</b>, and I can groove with <b>React</b> and <b>Next.js</b> too.<br/><br/>
+              Hey there! 👋 I'm a <b>frontend developer</b> living on the edge. I work primarily with <b>Vue.js</b> and <b>Nuxt</b>, but I can algo write <b>React</b> and <b>Next.js</b> too.<br/><br/>
 
               Currently, I'm <b>Freaking out</b> 'cause, well, <b>I have no job!</b> Living the thrill, you know?<br/><br/>
 
